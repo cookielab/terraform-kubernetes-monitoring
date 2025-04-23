@@ -1,9 +1,9 @@
 locals {
-  bucket_prefix              = "mimir-"
-  mimir_service_account_name = "mimir"
+  bucket_prefix             = "loki-"
+  loki_service_account_name = "loki"
 }
 
-module "mimir_s3" {
+module "loki_s3" {
   for_each = toset(var.buckets)
 
   source  = "terraform-aws-modules/s3-bucket/aws"
@@ -23,12 +23,12 @@ module "mimir_s3" {
   restrict_public_buckets               = true
 }
 
-resource "aws_iam_policy" "mimir_s3" {
+resource "aws_iam_policy" "loki_s3" {
   name   = "${var.storage_prefix}${local.bucket_prefix}AmazonS3ReadOnlyAccess"
-  policy = data.aws_iam_policy_document.mimir_s3.json
+  policy = data.aws_iam_policy_document.loki_s3.json
 }
 
-data "aws_iam_policy_document" "mimir_s3" {
+data "aws_iam_policy_document" "loki_s3" {
   statement {
     effect = "Allow"
 
@@ -40,22 +40,23 @@ data "aws_iam_policy_document" "mimir_s3" {
       "s3:ListBucket",
       "s3:ListBucketMultipartUploads",
       "s3:ListMultipartUploadParts",
-      "s3:PutObject"
+      "s3:PutObject",
+      "s3:ListObjects"
     ]
 
     resources = flatten([
-      for k, v in module.mimir_s3 : [v.s3_bucket_arn, "${v.s3_bucket_arn}/*"]
+      for k, v in module.loki_s3 : [v.s3_bucket_arn, "${v.s3_bucket_arn}/*"]
     ])
   }
 }
 
-module "mimir_irsa" {
+module "loki_irsa" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
   version = "5.54.1"
 
   role_name_prefix = "${var.storage_prefix}${local.bucket_prefix}irsa"
   role_policy_arns = {
-    s3_policy = aws_iam_policy.mimir_s3.arn
+    s3_policy = aws_iam_policy.loki_s3.arn
   }
 
   oidc_providers = {
@@ -63,23 +64,22 @@ module "mimir_irsa" {
       provider_arn = var.oidc_provider_arn
       namespace_service_accounts = [format("%s:%s",
         var.namespace,
-        local.mimir_service_account_name)
+        local.loki_service_account_name)
       ]
     }
   }
 }
 
-module "mimir" {
+module "loki" {
   source = "../shared"
 
   cloud_provider = var.cloud_provider
-  namespace      = var.namespace
   storage_prefix = var.storage_prefix
-  aws_region     = var.aws_region
-  mimir = {
+  namespace      = var.namespace
+  loki = {
     serviceAccount = {
       annotations = {
-        "eks.amazonaws.com/role-arn" = module.mimir_irsa.iam_role_arn
+        "eks.amazonaws.com/role-arn" = module.loki_irsa.iam_role_arn
       }
     }
   }

@@ -1,8 +1,8 @@
 locals {
-  bucket_prefix = "mimir-"
+  bucket_prefix = "tempo-"
 }
 
-module "mimir_gcs" {
+module "tempo_gcs" {
   source  = "terraform-google-modules/cloud-storage/google"
   version = "~> 10.0"
 
@@ -13,14 +13,15 @@ module "mimir_gcs" {
 }
 
 resource "google_project_iam_custom_role" "gcs_rw_role" {
-  role_id     = "mimir_gcs_rw_role"
-  title       = "GCS Read Write Role"
-  description = "A custom role for mimir to access GCS buckets"
+  role_id     = "tempo_gcs_rw_role"
+  title       = "Tempo GCS Read Write Role"
+  description = "A custom role for tempo to access GCS buckets"
   permissions = [
     "storage.objects.get",
     "storage.objects.list",
     "storage.objects.create",
     "storage.objects.delete",
+    "storage.buckets.get"
   ]
   project = var.project_id
 }
@@ -32,18 +33,18 @@ resource "google_storage_bucket_iam_binding" "gcs_rw_member" {
   members  = var.rw_bucket_roles
 }
 
-module "mimir" {
+module "tempo" {
   source = "../shared"
 
   cloud_provider   = var.cloud_provider
   project_id       = var.project_id
   storage_location = var.storage_location
-  mimir            = var.mimir
   rw_bucket_roles  = var.rw_bucket_roles
+  otel_collector   = var.otel_collector
+  tempo            = var.tempo
   namespace        = var.namespace
-  storage_prefix   = var.storage_prefix
   storage_bucket_name = {
     for bucket in var.buckets :
-    "${local.bucket_prefix}${bucket}" => module.mimir_gcs.names["${local.bucket_prefix}${bucket}"]
+    "${local.bucket_prefix}${bucket}" => module.tempo_gcs.names["${local.bucket_prefix}${bucket}"]
   }
 }

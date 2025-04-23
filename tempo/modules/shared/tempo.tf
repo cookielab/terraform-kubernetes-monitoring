@@ -1,12 +1,10 @@
-resource "helm_release" "mimir" {
+resource "helm_release" "tempo" {
   name             = var.helm_release_name
   repository       = "https://grafana.github.io/helm-charts"
-  chart            = "mimir-distributed"
+  chart            = "tempo-distributed"
   namespace        = var.namespace
-  version          = var.mimir_helm_version
+  version          = var.tempo_helm_version
   create_namespace = true
 
-  values = [yamlencode(local.mimir_config)]
+  values = [yamlencode(local.tempo_config)]
 }
-
-

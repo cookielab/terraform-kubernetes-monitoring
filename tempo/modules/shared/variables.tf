@@ -18,25 +18,20 @@ variable "storage_prefix" {
 
 variable "namespace" {
   type        = string
-  description = "The namespace to deploy the mimir service to"
+  description = "The namespace to deploy the tempo service to"
   default     = "monitoring"
 }
 
-variable "mimir_helm_version" {
+variable "tempo_helm_version" {
   type        = string
-  description = "The version of the mimir helm chart to use"
-  default     = "5.8.0-weekly.335"
+  description = "The version of the tempo helm chart to use"
+  default     = "1.34.0"
 }
 
 variable "helm_release_name" {
   type        = string
   description = "The name of the helm release to use"
-  default     = "mimir"
-}
-
-variable "aws_region" {
-  type    = string
-  default = "eu-west-1"
+  default     = "tempo"
 }
 
 variable "rw_bucket_roles" {
@@ -62,12 +57,33 @@ variable "cloud_provider" {
   description = "The cloud provider to use (gcp, aws)"
 }
 
-variable "mimir" {
+variable "aws_region" {
+  type        = string
+  description = "The AWS region"
+  default     = "eu-west-1"
+}
+
+variable "tempo" {
   type = object({
     serviceAccount = optional(object({
-      name        = optional(string, "mimir")
+      name        = optional(string, "tempo")
       create      = optional(bool, true)
       annotations = optional(map(string), {})
+    }), {})
+    metricsGenerator = optional(object({
+      enabled        = optional(bool, true)
+      remoteWriteUrl = optional(string, "")
+      processors     = optional(list(string), ["service-graphs", "span-metrics"])
+      resources = optional(object({
+        requests = optional(object({
+          cpu    = optional(string, "100m")
+          memory = optional(string, "100Mi")
+        }), {})
+        limits = optional(object({
+          cpu    = optional(string, "100m")
+          memory = optional(string, "100Mi")
+        }), {})
+      }), {})
     }), {})
     ingester = optional(object({
       replicas = optional(number, 2)
@@ -77,44 +93,30 @@ variable "mimir" {
       resources = optional(object({
         requests = optional(object({
           cpu    = optional(string, "100m")
-          memory = optional(string, "512Mi")
+          memory = optional(string, "256Mi")
         }), {})
         limits = optional(object({
-          cpu    = optional(string, "200m")
-          memory = optional(string, "512Mi")
+          cpu    = optional(string, "100m")
+          memory = optional(string, "256Mi")
         }), {})
       }), {})
     }), {})
-    store_gateway = optional(object({
+    gateway = optional(object({
+      enabled  = optional(bool, true)
       replicas = optional(number, 1)
-      zoneAwareReplication = optional(object({
-        enabled = optional(bool, false)
-      }), {})
       resources = optional(object({
         requests = optional(object({
           cpu    = optional(string, "100m")
           memory = optional(string, "100Mi")
         }), {})
         limits = optional(object({
-          cpu    = optional(string, "200m")
-          memory = optional(string, "200Mi")
+          cpu    = optional(string, "100m")
+          memory = optional(string, "100Mi")
         }), {})
       }), {})
     }), {})
     querier = optional(object({
-      replicas = optional(number, 2)
-      resources = optional(object({
-        requests = optional(object({
-          cpu    = optional(string, "100m")
-          memory = optional(string, "100Mi")
-        }), {})
-        limits = optional(object({
-          cpu    = optional(string, "200m")
-          memory = optional(string, "200Mi")
-        }), {})
-      }), {})
-    }), {})
-    ruler = optional(object({
+      enabled  = optional(bool, true)
       replicas = optional(number, 1)
       resources = optional(object({
         requests = optional(object({
@@ -122,52 +124,37 @@ variable "mimir" {
           memory = optional(string, "100Mi")
         }), {})
         limits = optional(object({
-          cpu    = optional(string, "200m")
-          memory = optional(string, "200Mi")
-        }), {})
-      }), {})
-    }), {})
-    compactor = optional(object({
-      replicas = optional(number, 1)
-      resources = optional(object({
-        requests = optional(object({
           cpu    = optional(string, "100m")
           memory = optional(string, "100Mi")
         }), {})
-        limits = optional(object({
-          cpu    = optional(string, "200m")
-          memory = optional(string, "200Mi")
+      }), {})
+    }), {})
+    traces = optional(object({
+      otlp = optional(object({
+        http = optional(object({
+          enabled = optional(bool, true)
+        }), {})
+        grpc = optional(object({
+          enabled = optional(bool, true)
         }), {})
       }), {})
     }), {})
-    alertmanager = optional(object({
-      replicas = optional(number, 1)
-      resources = optional(object({
-        requests = optional(object({
-          cpu    = optional(string, "100m")
-          memory = optional(string, "100Mi")
-        }), {})
-        limits = optional(object({
-          cpu    = optional(string, "200m")
-          memory = optional(string, "200Mi")
-        }), {})
-      }), {})
-    }), {})
-    distributor = optional(object({
-      replicas = optional(number, 1)
-      resources = optional(object({
-        requests = optional(object({
-          cpu    = optional(string, "100m")
-          memory = optional(string, "100Mi")
-        }), {})
-        limits = optional(object({
-          cpu    = optional(string, "200m")
-          memory = optional(string, "200Mi")
-        }), {})
-      }), {})
+    test_traces = optional(object({
+      enabled                    = optional(bool, false)
+      name                       = optional(string, "test-traces")
+      telemetrygen_image_version = optional(string, "v0.96.0")
     }), {})
   })
-  description = "The mimir configuration"
+  description = "The tempo configuration"
   default     = {}
+}
+
+variable "otel_collector" {
+  type = object({
+    name      = optional(string, "grafana-alloy-otel-collector")
+    namespace = optional(string, "monitoring")
+    port      = optional(number, 4317)
+  })
+  description = "The otel collector configuration"
 }
 

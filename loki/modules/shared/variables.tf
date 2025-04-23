@@ -1,18 +1,13 @@
-variable "namespace" {
+variable "project_id" {
   type        = string
-  default     = "monitoring"
-  description = "The namespace to deploy the mimir service account to"
+  description = "The GCP project ID"
+  default     = ""
 }
 
-variable "oidc_provider_arn" {
+variable "storage_location" {
   type        = string
-  description = "The OIDC provider ARN"
-}
-
-variable "buckets" {
-  type        = list(string)
-  description = "List of buckets to create"
-  default     = ["blocks", "alertmanager", "ruler"]
+  description = "The location of the storage bucket (for GCP)"
+  default     = "europe-west1"
 }
 
 variable "storage_prefix" {
@@ -21,30 +16,79 @@ variable "storage_prefix" {
   default     = ""
 }
 
+variable "namespace" {
+  type        = string
+  description = "The namespace to deploy the loki service to"
+  default     = "monitoring"
+}
+
+variable "loki_helm_version" {
+  type        = string
+  description = "The version of the loki helm chart to use"
+  default     = "6.29.0"
+}
+
+variable "rw_bucket_roles" {
+  type        = list(string)
+  description = "List of roles that need read/write access to the buckets"
+  default     = []
+}
+
+variable "oidc_provider_arn" {
+  type        = string
+  description = "The OIDC provider ARN"
+  default     = ""
+}
+
+variable "storage_bucket_name" {
+  type        = map(string)
+  description = "The name of the storage bucket"
+  default     = {}
+}
+
 variable "cloud_provider" {
   type        = string
   description = "The cloud provider to use (gcp, aws)"
-  default     = "aws"
 }
 
 variable "aws_region" {
   type        = string
-  description = "The AWS region to use"
+  description = "The AWS region"
   default     = "eu-west-1"
 }
 
-variable "mimir" {
+variable "helm_release_name" {
+  type        = string
+  description = "The name of the helm release to use"
+  default     = "loki"
+}
+
+variable "loki" {
   type = object({
+    index_prefix = optional(string, "index_")
+    index_period = optional(string, "24h")
     serviceAccount = optional(object({
-      name        = optional(string, "mimir")
+      name        = optional(string, "loki")
       create      = optional(bool, true)
       annotations = optional(map(string), {})
     }), {})
-    ingester = optional(object({
-      replicas = optional(number, 2)
-      zoneAwareReplication = optional(object({
-        enabled = optional(bool, false)
+    ruler = optional(object({
+      enabled  = optional(bool, false)
+      replicas = optional(number, 0)
+      resources = optional(object({
+        requests = optional(object({
+          cpu    = optional(string, "100m")
+          memory = optional(string, "100Mi")
+        }), {})
+        limits = optional(object({
+          cpu    = optional(string, "200m")
+          memory = optional(string, "200Mi")
+        }), {})
       }), {})
+    }), {})
+    write = optional(object({
+      enabled  = optional(bool, true)
+      replicas = optional(number, 2)
       resources = optional(object({
         requests = optional(object({
           cpu    = optional(string, "100m")
@@ -56,11 +100,37 @@ variable "mimir" {
         }), {})
       }), {})
     }), {})
-    store_gateway = optional(object({
-      replicas = optional(number, 1)
-      zoneAwareReplication = optional(object({
-        enabled = optional(bool, true)
+    read = optional(object({
+      enabled  = optional(bool, true)
+      replicas = optional(number, 2)
+      resources = optional(object({
+        requests = optional(object({
+          cpu    = optional(string, "100m")
+          memory = optional(string, "100Mi")
+        }), {})
+        limits = optional(object({
+          cpu    = optional(string, "200m")
+          memory = optional(string, "200Mi")
+        }), {})
       }), {})
+    }), {})
+    backend = optional(object({
+      enabled  = optional(bool, true)
+      replicas = optional(number, 1)
+      resources = optional(object({
+        requests = optional(object({
+          cpu    = optional(string, "100m")
+          memory = optional(string, "100Mi")
+        }), {})
+        limits = optional(object({
+          cpu    = optional(string, "200m")
+          memory = optional(string, "200Mi")
+        }), {})
+      }), {})
+    }), {})
+    gateway = optional(object({
+      enabled  = optional(bool, true)
+      replicas = optional(number, 1)
       resources = optional(object({
         requests = optional(object({
           cpu    = optional(string, "100m")
@@ -73,59 +143,8 @@ variable "mimir" {
       }), {})
     }), {})
     querier = optional(object({
-      replicas = optional(number, 2)
-      resources = optional(object({
-        requests = optional(object({
-          cpu    = optional(string, "100m")
-          memory = optional(string, "100Mi")
-        }), {})
-        limits = optional(object({
-          cpu    = optional(string, "200m")
-          memory = optional(string, "200Mi")
-        }), {})
-      }), {})
-    }), {})
-    ruler = optional(object({
-      replicas = optional(number, 1)
-      resources = optional(object({
-        requests = optional(object({
-          cpu    = optional(string, "100m")
-          memory = optional(string, "100Mi")
-        }), {})
-        limits = optional(object({
-          cpu    = optional(string, "200m")
-          memory = optional(string, "200Mi")
-        }), {})
-      }), {})
-    }), {})
-    compactor = optional(object({
-      replicas = optional(number, 1)
-      resources = optional(object({
-        requests = optional(object({
-          cpu    = optional(string, "100m")
-          memory = optional(string, "100Mi")
-        }), {})
-        limits = optional(object({
-          cpu    = optional(string, "200m")
-          memory = optional(string, "200Mi")
-        }), {})
-      }), {})
-    }), {})
-    alertmanager = optional(object({
-      replicas = optional(number, 1)
-      resources = optional(object({
-        requests = optional(object({
-          cpu    = optional(string, "100m")
-          memory = optional(string, "100Mi")
-        }), {})
-        limits = optional(object({
-          cpu    = optional(string, "200m")
-          memory = optional(string, "200Mi")
-        }), {})
-      }), {})
-    }), {})
-    distributor = optional(object({
-      replicas = optional(number, 1)
+      enabled  = optional(bool, false)
+      replicas = optional(number, 0)
       resources = optional(object({
         requests = optional(object({
           cpu    = optional(string, "100m")
@@ -138,6 +157,7 @@ variable "mimir" {
       }), {})
     }), {})
   })
-  description = "The mimir configuration"
+  description = "The Loki configuration"
   default     = {}
 }
+

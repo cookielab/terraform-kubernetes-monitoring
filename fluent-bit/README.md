@@ -96,7 +96,7 @@ No modules.
 | <a name="input_logs_endpoint_url"></a> [logs\_endpoint\_url](#input\_logs\_endpoint\_url) | The URL of the logs endpoint | `string` | n/a | yes |
 | <a name="input_logs_labels"></a> [logs\_labels](#input\_logs\_labels) | The labels for the logs | `map(string)` | `{}` | no |
 | <a name="input_logs_storage"></a> [logs\_storage](#input\_logs\_storage) | The type of logs storage to use | `string` | `"loki"` | no |
-| <a name="input_loki"></a> [loki](#input\_loki) | n/a | <pre>object({<br/>    enabled = optional(bool, false)<br/>    basic_auth = optional(object({<br/>      enabled  = optional(bool, false)<br/>      username = optional(string)<br/>      password = optional(string)<br/>    }), {})<br/>    bearer_token = optional(object({<br/>      enabled = optional(bool, false)<br/>      token   = optional(string)<br/>    }), {})<br/>    tenant_id = optional(string, "default")<br/>  })</pre> | `{}` | no |
+| <a name="input_loki"></a> [loki](#input\_loki) | n/a | <pre>object({<br/>    basic_auth = optional(object({<br/>      enabled  = optional(bool, false)<br/>      username = optional(string)<br/>      password = optional(string)<br/>    }), {})<br/>    bearer_token = optional(object({<br/>      enabled = optional(bool, false)<br/>      token   = optional(string)<br/>    }), {})<br/>    tenant_id = optional(string, "default")<br/>  })</pre> | `{}` | no |
 | <a name="input_namespace"></a> [namespace](#input\_namespace) | The namespace to deploy the Fluent Bit service to | `string` | `"monitoring"` | no |
 | <a name="input_use_defaults"></a> [use\_defaults](#input\_use\_defaults) | Whether to use the default outputs | `map(bool)` | <pre>{<br/>  "filters": true,<br/>  "inputs": true,<br/>  "outputs": true<br/>}</pre> | no |
 

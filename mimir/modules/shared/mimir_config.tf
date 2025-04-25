@@ -92,6 +92,7 @@ locals {
           }
         )
       }
+      runtimeConfig = var.mimir.runtimeConfig
       ingester = {
         replicas             = var.mimir.ingester.replicas
         zoneAwareReplication = var.mimir.ingester.zoneAwareReplication

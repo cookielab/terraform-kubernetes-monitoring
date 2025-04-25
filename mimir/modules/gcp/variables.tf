@@ -141,6 +141,7 @@ variable "mimir" {
         }), {})
       }), {})
     }), {})
+    runtimeConfig = optional(map(any), {})
   })
   description = "The mimir configuration"
   default     = {}

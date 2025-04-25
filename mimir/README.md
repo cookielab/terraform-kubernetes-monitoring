@@ -54,6 +54,13 @@ module "mimir" {
         enabled = false
         }
     }
+    runtimeConfig = {
+      overrides = {
+        <tenant_id> = {
+          max_label_names_per_series = 100
+        }
+      }
+    }
   }
   rw_bucket_roles = [
     "serviceAccount:project-id@project-id.iam.gserviceaccount.com",

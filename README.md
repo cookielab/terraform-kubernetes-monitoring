@@ -13,8 +13,6 @@ This directory contains Terraform modules for deploying observability tools on K
     - Storage for logs
 - `tempo/` - Tempo
     - Storage for traces
-- `fluent-bit/` - Fluent Bit
-    - Sending logs to Loki or other destinations
 
 ## Scraping and OTel collector
 

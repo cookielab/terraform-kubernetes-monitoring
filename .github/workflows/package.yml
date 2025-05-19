@@ -1,0 +1,52 @@
+name: Terraform Package
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.10.0"
+
+      - name: Initialize Terraform
+        run: |
+          terraform init
+
+      - name: Validate Terraform
+        run: |
+          terraform validate
+
+      - name: Package Module
+        run: |
+          zip -r terraform-kubernetes-grafana-alloy.zip ./* \
+            -x '*.git*' \
+            -x '*.github*' \
+            -x '*.gitignore'
+
+      - name: Get Version
+        id: get_version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+
+      - name: Upload Package
+        uses: actions/upload-artifact@v3
+        with:
+          name: terraform-kubernetes-grafana-alloy-${{ steps.get_version.outputs.VERSION }}
+          path: terraform-kubernetes-grafana-alloy.zip
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: terraform-kubernetes-grafana-alloy.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

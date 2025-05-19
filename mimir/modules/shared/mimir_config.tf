@@ -97,11 +97,13 @@ locals {
         replicas             = var.mimir.ingester.replicas
         zoneAwareReplication = var.mimir.ingester.zoneAwareReplication
         resources            = var.mimir.ingester.resources
+        persistentVolume     = var.mimir.ingester.persistentVolume
       }
       store_gateway = {
         replicas             = var.mimir.store_gateway.replicas
         zoneAwareReplication = var.mimir.store_gateway.zoneAwareReplication
         resources            = var.mimir.store_gateway.resources
+        persistentVolume     = var.mimir.store_gateway.persistentVolume
       }
       querier = {
         replicas  = var.mimir.querier.replicas

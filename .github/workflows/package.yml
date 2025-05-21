@@ -45,7 +45,7 @@ jobs:
           path: terraform-kubernetes-grafana-alloy.zip
 
       - name: Create Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           files: terraform-kubernetes-grafana-alloy.zip
         env:

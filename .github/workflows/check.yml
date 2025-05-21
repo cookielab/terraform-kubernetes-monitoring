@@ -37,7 +37,7 @@ jobs:
     name: Terraform Validate
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/cookielab/container-image-terraform:1.9
+      image: ghcr.io/cookielab/container-image-terraform:1.12
       options: --user root
       credentials:
         username: ${{ github.actor }}

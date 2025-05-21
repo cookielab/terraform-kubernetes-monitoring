@@ -71,6 +71,10 @@ variable "mimir" {
     }), {})
     ingester = optional(object({
       replicas = optional(number, 2)
+      persistentVolume = optional(object({
+        enabled = optional(bool, true)
+        size    = optional(string, "10Gi")
+      }), {})
       zoneAwareReplication = optional(object({
         enabled = optional(bool, false)
       }), {})
@@ -89,6 +93,10 @@ variable "mimir" {
       replicas = optional(number, 1)
       zoneAwareReplication = optional(object({
         enabled = optional(bool, false)
+      }), {})
+      persistentVolume = optional(object({
+        enabled = optional(bool, true)
+        size    = optional(string, "2Gi")
       }), {})
       resources = optional(object({
         requests = optional(object({

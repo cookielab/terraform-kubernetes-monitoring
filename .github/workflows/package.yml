@@ -39,7 +39,7 @@ jobs:
         run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
 
       - name: Upload Package
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: terraform-kubernetes-grafana-alloy-${{ steps.get_version.outputs.VERSION }}
           path: terraform-kubernetes-grafana-alloy.zip

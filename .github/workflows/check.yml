@@ -9,7 +9,7 @@ jobs:
     name: Terraform Format
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/cookielab/container-image-terraform:1.10
+      image: ghcr.io/cookielab/container-image-terraform:1.12
       options: --user root
       credentials:
         username: ${{ github.actor }}

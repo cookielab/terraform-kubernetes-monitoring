@@ -1,5 +1,6 @@
 variable "grafana" {
   type = object({
+    envFromSecret = optional(string, "")
     env = optional(object({
       GF_SERVER_ROOT_URL = optional(string, "")
     }), {})

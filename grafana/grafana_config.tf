@@ -1,7 +1,8 @@
 locals {
   grafana_config = {
-    replicas = var.grafana.replicas
-    env      = var.grafana.env
+    replicas      = var.grafana.replicas
+    envFromSecret = var.grafana.envFromSecret
+    env           = var.grafana.env
     persistence = {
       enabled      = var.grafana.persistence.enabled
       storageClass = var.cloud_provider == "gcp" && var.grafana.persistence.storageClass == "" ? "standard-rwo" : var.cloud_provider == "aws" && var.grafana.persistence.storageClass == "" ? "gp3" : var.grafana.persistence.storageClass

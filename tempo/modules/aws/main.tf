@@ -1,6 +1,22 @@
 locals {
   bucket_prefix              = "tempo-"
   tempo_service_account_name = "tempo"
+  tempo_for_shared = merge(
+    var.tempo,
+    {
+      serviceAccount = merge(
+        try(var.tempo.serviceAccount, {}),
+        {
+          annotations = merge(
+            try(var.tempo.serviceAccount.annotations, {}),
+            var.use_pod_identity ? {} : {
+              "eks.amazonaws.com/role-arn" = module.tempo_irsa[0].iam_role_arn
+            }
+          )
+        }
+      )
+    }
+  )
 }
 
 module "tempo_s3" {
@@ -105,13 +121,7 @@ module "tempo" {
   namespace      = var.namespace
   otel_collector = var.otel_collector
   storage_prefix = var.storage_prefix
-  tempo = {
-    serviceAccount = {
-      annotations = var.use_pod_identity ? {} : {
-        "eks.amazonaws.com/role-arn" = module.tempo_irsa[0].iam_role_arn
-      }
-    }
-  }
+  tempo          = local.tempo_for_shared
   storage_bucket_name = {
     for bucket in var.buckets :
     "${local.bucket_prefix}${bucket}" => "${local.bucket_prefix}${bucket}"

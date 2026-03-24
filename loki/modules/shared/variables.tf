@@ -141,6 +141,17 @@ variable "loki" {
           memory = optional(string, "200Mi")
         }), {})
       }), {})
+      ingress = optional(object({
+        enabled     = optional(bool, false)
+        annotations = optional(map(string), {})
+        hosts       = optional(list(string), [])
+        path        = optional(string, "/")
+        pathType    = optional(string, "ImplementationSpecific")
+        tls = optional(list(object({
+          secretName = optional(string, "loki-gateway-tls")
+          hosts      = optional(list(string), [""])
+        })), [])
+      }), {})
     }), {})
     querier = optional(object({
       enabled  = optional(bool, false)

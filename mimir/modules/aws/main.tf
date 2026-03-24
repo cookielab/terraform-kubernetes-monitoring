@@ -24,7 +24,7 @@ module "mimir_s3" {
 }
 
 resource "aws_iam_policy" "mimir_s3" {
-  name   = "${var.storage_prefix}${local.bucket_prefix}AmazonS3ReadOnlyAccess"
+  name   = "${var.storage_prefix}${local.bucket_prefix}AmazonS3ReadWriteAccess"
   policy = data.aws_iam_policy_document.mimir_s3.json
 }
 
@@ -50,6 +50,7 @@ data "aws_iam_policy_document" "mimir_s3" {
 }
 
 module "mimir_irsa" {
+  count   = var.use_pod_identity ? 0 : 1
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
   version = "5.54.1"
 
@@ -69,6 +70,34 @@ module "mimir_irsa" {
   }
 }
 
+resource "aws_iam_role" "mimir_pod_identity" {
+  count       = var.use_pod_identity ? 1 : 0
+  name_prefix = "${var.storage_prefix}${local.bucket_prefix}pod-identity-"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect    = "Allow"
+      Principal = { Service = "pods.eks.amazonaws.com" }
+      Action    = ["sts:AssumeRole", "sts:TagSession"]
+    }]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "mimir_pod_identity" {
+  count      = var.use_pod_identity ? 1 : 0
+  role       = aws_iam_role.mimir_pod_identity[0].name
+  policy_arn = aws_iam_policy.mimir_s3.arn
+}
+
+resource "aws_eks_pod_identity_association" "mimir" {
+  count           = var.use_pod_identity ? 1 : 0
+  cluster_name    = var.cluster_name
+  namespace       = var.namespace
+  service_account = local.mimir_service_account_name
+  role_arn        = aws_iam_role.mimir_pod_identity[0].arn
+}
+
 module "mimir" {
   source = "../shared"
 
@@ -78,8 +107,8 @@ module "mimir" {
   aws_region     = var.aws_region
   mimir = {
     serviceAccount = {
-      annotations = {
-        "eks.amazonaws.com/role-arn" = module.mimir_irsa.iam_role_arn
+      annotations = var.use_pod_identity ? {} : {
+        "eks.amazonaws.com/role-arn" = module.mimir_irsa[0].iam_role_arn
       }
     }
   }

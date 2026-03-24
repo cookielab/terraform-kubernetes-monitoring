@@ -6,6 +6,12 @@ variable "namespace" {
 variable "oidc_provider_arn" {
   type        = string
   description = "The OIDC provider ARN"
+  default     = ""
+
+  validation {
+    condition     = var.use_pod_identity || var.oidc_provider_arn != ""
+    error_message = "oidc_provider_arn must be set when use_pod_identity is false."
+  }
 }
 
 variable "buckets" {
@@ -126,4 +132,21 @@ variable "loki" {
   })
   description = "The Loki configuration"
   default     = {}
+}
+
+variable "use_pod_identity" {
+  type        = bool
+  description = "Use EKS Pod Identity instead of IRSA for S3 access"
+  default     = false
+}
+
+variable "cluster_name" {
+  type        = string
+  description = "The EKS cluster name (required when use_pod_identity is true)"
+  default     = ""
+
+  validation {
+    condition     = !var.use_pod_identity || var.cluster_name != ""
+    error_message = "cluster_name must be set when use_pod_identity is true."
+  }
 }

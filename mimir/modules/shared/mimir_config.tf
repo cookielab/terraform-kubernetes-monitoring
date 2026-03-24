@@ -125,6 +125,19 @@ locals {
         replicas  = var.mimir.distributor.replicas
         resources = var.mimir.distributor.resources
       }
+      gateway = {
+        enabled   = var.mimir.gateway.enabled
+        replicas  = var.mimir.gateway.replicas
+        resources = var.mimir.gateway.resources
+        ingress = {
+          enabled     = var.mimir.gateway.ingress.enabled
+          annotations = var.mimir.gateway.ingress.annotations
+          hosts       = var.mimir.gateway.ingress.hosts
+          path        = var.mimir.gateway.ingress.path
+          pathType    = var.mimir.gateway.ingress.pathType
+          tls         = var.mimir.gateway.ingress.tls
+        }
+      }
     }
   )
 }

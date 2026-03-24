@@ -5,8 +5,8 @@ locals {
     ? "${local.tempo_protocol}://${var.tempo.gateway.ingress.hosts[0]}"
     : "http://tempo-gateway.${var.namespace}.svc.cluster.local:80"
   )
-  tempo_otlp_grpc_internal = "http://tempo-gateway.${var.namespace}.svc.cluster.local:4317"
-  tempo_otlp_http_internal = "http://tempo-gateway.${var.namespace}.svc.cluster.local:4318"
+  tempo_otlp_grpc_internal = "http://tempo-distributor.${var.namespace}.svc.cluster.local:4317"
+  tempo_otlp_http_internal = "http://tempo-distributor.${var.namespace}.svc.cluster.local:4318"
 }
 
 output "tempo_gateway_url" {

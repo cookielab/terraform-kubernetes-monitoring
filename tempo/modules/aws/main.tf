@@ -40,8 +40,7 @@ data "aws_iam_policy_document" "tempo_s3" {
       "s3:ListBucket",
       "s3:ListBucketMultipartUploads",
       "s3:ListMultipartUploadParts",
-      "s3:PutObject",
-      "s3:ListObjects"
+      "s3:PutObject"
     ]
 
     resources = flatten([

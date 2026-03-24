@@ -24,7 +24,7 @@ module "loki_s3" {
 }
 
 resource "aws_iam_policy" "loki_s3" {
-  name   = "${var.storage_prefix}${local.bucket_prefix}AmazonS3ReadOnlyAccess"
+  name   = "${var.storage_prefix}${local.bucket_prefix}AmazonS3ReadWriteAccess"
   policy = data.aws_iam_policy_document.loki_s3.json
 }
 

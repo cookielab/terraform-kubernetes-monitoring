@@ -24,7 +24,7 @@ module "tempo_s3" {
 }
 
 resource "aws_iam_policy" "tempo_s3" {
-  name   = "${var.storage_prefix}${local.bucket_prefix}AmazonS3ReadOnlyAccess"
+  name   = "${var.storage_prefix}${local.bucket_prefix}AmazonS3ReadWriteAccess"
   policy = data.aws_iam_policy_document.tempo_s3.json
 }
 
@@ -40,7 +40,8 @@ data "aws_iam_policy_document" "tempo_s3" {
       "s3:ListBucket",
       "s3:ListBucketMultipartUploads",
       "s3:ListMultipartUploadParts",
-      "s3:PutObject"
+      "s3:PutObject",
+      "s3:ListObjects"
     ]
 
     resources = flatten([

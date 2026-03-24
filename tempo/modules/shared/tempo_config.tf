@@ -43,6 +43,14 @@ locals {
       enabled   = var.tempo.gateway.enabled
       replicas  = var.tempo.gateway.replicas
       resources = var.tempo.gateway.resources
+      ingress = {
+        enabled     = var.tempo.gateway.ingress.enabled
+        annotations = var.tempo.gateway.ingress.annotations
+        hosts       = var.tempo.gateway.ingress.hosts
+        path        = var.tempo.gateway.ingress.path
+        pathType    = var.tempo.gateway.ingress.pathType
+        tls         = var.tempo.gateway.ingress.tls
+      }
     }
     querier = {
       enabled   = var.tempo.querier.enabled

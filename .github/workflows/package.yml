@@ -29,7 +29,7 @@ jobs:
 
       - name: Package Module
         run: |
-          zip -r terraform-kubernetes-grafana-alloy.zip ./* \
+          zip -r terraform-kubernetes-monitoring.zip ./* \
             -x '*.git*' \
             -x '*.github*' \
             -x '*.gitignore'
@@ -41,12 +41,12 @@ jobs:
       - name: Upload Package
         uses: actions/upload-artifact@v4
         with:
-          name: terraform-kubernetes-grafana-alloy-${{ steps.get_version.outputs.VERSION }}
-          path: terraform-kubernetes-grafana-alloy.zip
+          name: terraform-kubernetes-monitoring-${{ steps.get_version.outputs.VERSION }}
+          path: terraform-kubernetes-monitoring.zip
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
-          files: terraform-kubernetes-grafana-alloy.zip
+          files: terraform-kubernetes-monitoring.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

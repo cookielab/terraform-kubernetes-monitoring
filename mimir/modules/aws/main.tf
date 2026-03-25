@@ -105,13 +105,14 @@ module "mimir" {
   namespace      = var.namespace
   storage_prefix = var.storage_prefix
   aws_region     = var.aws_region
-  mimir = {
-    serviceAccount = {
-      annotations = var.use_pod_identity ? {} : {
-        "eks.amazonaws.com/role-arn" = module.mimir_irsa[0].iam_role_arn
-      }
-    }
-  }
+  mimir = merge(var.mimir, {
+    serviceAccount = merge(var.mimir.serviceAccount, {
+      annotations = var.use_pod_identity ? var.mimir.serviceAccount.annotations : merge(
+        var.mimir.serviceAccount.annotations,
+        { "eks.amazonaws.com/role-arn" = module.mimir_irsa[0].iam_role_arn }
+      )
+    })
+  })
   storage_bucket_name = {
     for bucket in var.buckets :
     "${local.bucket_prefix}${bucket}" => "${local.bucket_prefix}${bucket}"

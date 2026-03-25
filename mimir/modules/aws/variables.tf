@@ -160,6 +160,31 @@ variable "mimir" {
         }), {})
       }), {})
     }), {})
+    gateway = optional(object({
+      enabled  = optional(bool, true)
+      replicas = optional(number, 1)
+      resources = optional(object({
+        requests = optional(object({
+          cpu    = optional(string, "100m")
+          memory = optional(string, "100Mi")
+        }), {})
+        limits = optional(object({
+          cpu    = optional(string, "200m")
+          memory = optional(string, "200Mi")
+        }), {})
+      }), {})
+      ingress = optional(object({
+        enabled     = optional(bool, false)
+        annotations = optional(map(string), {})
+        hosts       = optional(list(string), [])
+        path        = optional(string, "/")
+        pathType    = optional(string, "ImplementationSpecific")
+        tls = optional(list(object({
+          secretName = optional(string, "mimir-gateway-tls")
+          hosts      = optional(list(string), [""])
+        })), [])
+      }), {})
+    }), {})
     runtimeConfig = optional(map(any), {})
   })
   description = "The mimir configuration"

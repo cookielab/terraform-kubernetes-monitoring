@@ -105,13 +105,14 @@ module "loki" {
   cloud_provider = var.cloud_provider
   storage_prefix = var.storage_prefix
   namespace      = var.namespace
-  loki = {
-    serviceAccount = {
-      annotations = var.use_pod_identity ? {} : {
-        "eks.amazonaws.com/role-arn" = module.loki_irsa[0].iam_role_arn
-      }
-    }
-  }
+  loki = merge(var.loki, {
+    serviceAccount = merge(var.loki.serviceAccount, {
+      annotations = var.use_pod_identity ? var.loki.serviceAccount.annotations : merge(
+        var.loki.serviceAccount.annotations,
+        { "eks.amazonaws.com/role-arn" = module.loki_irsa[0].iam_role_arn }
+      )
+    })
+  })
   storage_bucket_name = {
     for bucket in var.buckets :
     "${local.bucket_prefix}${bucket}" => "${local.bucket_prefix}${bucket}"

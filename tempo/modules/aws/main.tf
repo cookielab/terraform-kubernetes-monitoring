@@ -105,13 +105,14 @@ module "tempo" {
   namespace      = var.namespace
   otel_collector = var.otel_collector
   storage_prefix = var.storage_prefix
-  tempo = {
-    serviceAccount = {
-      annotations = var.use_pod_identity ? {} : {
-        "eks.amazonaws.com/role-arn" = module.tempo_irsa[0].iam_role_arn
-      }
-    }
-  }
+  tempo = merge(var.tempo, {
+    serviceAccount = merge(var.tempo.serviceAccount, {
+      annotations = var.use_pod_identity ? var.tempo.serviceAccount.annotations : merge(
+        var.tempo.serviceAccount.annotations,
+        { "eks.amazonaws.com/role-arn" = module.tempo_irsa[0].iam_role_arn }
+      )
+    })
+  })
   storage_bucket_name = {
     for bucket in var.buckets :
     "${local.bucket_prefix}${bucket}" => "${local.bucket_prefix}${bucket}"

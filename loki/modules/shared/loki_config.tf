@@ -40,10 +40,14 @@ locals {
       ingress = {
         enabled     = var.loki.gateway.ingress.enabled
         annotations = var.loki.gateway.ingress.annotations
-        hosts       = var.loki.gateway.ingress.hosts
-        path        = var.loki.gateway.ingress.path
-        pathType    = var.loki.gateway.ingress.pathType
-        tls         = var.loki.gateway.ingress.tls
+        hosts = [for host in var.loki.gateway.ingress.hosts : {
+          host = host
+          paths = [{
+            path     = var.loki.gateway.ingress.path
+            pathType = var.loki.gateway.ingress.pathType
+          }]
+        }]
+        tls = var.loki.gateway.ingress.tls
       }
     }
     write = {

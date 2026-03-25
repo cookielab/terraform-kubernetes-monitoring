@@ -46,10 +46,14 @@ locals {
       ingress = {
         enabled     = var.tempo.gateway.ingress.enabled
         annotations = var.tempo.gateway.ingress.annotations
-        hosts       = var.tempo.gateway.ingress.hosts
-        path        = var.tempo.gateway.ingress.path
-        pathType    = var.tempo.gateway.ingress.pathType
-        tls         = var.tempo.gateway.ingress.tls
+        hosts = [for host in var.tempo.gateway.ingress.hosts : {
+          host = host
+          paths = [{
+            path     = var.tempo.gateway.ingress.path
+            pathType = var.tempo.gateway.ingress.pathType
+          }]
+        }]
+        tls = var.tempo.gateway.ingress.tls
       }
     }
     querier = {

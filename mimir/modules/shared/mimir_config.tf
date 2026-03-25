@@ -132,10 +132,14 @@ locals {
         ingress = {
           enabled     = var.mimir.gateway.ingress.enabled
           annotations = var.mimir.gateway.ingress.annotations
-          hosts       = var.mimir.gateway.ingress.hosts
-          path        = var.mimir.gateway.ingress.path
-          pathType    = var.mimir.gateway.ingress.pathType
-          tls         = var.mimir.gateway.ingress.tls
+          hosts = [for host in var.mimir.gateway.ingress.hosts : {
+            host = host
+            paths = [{
+              path     = var.mimir.gateway.ingress.path
+              pathType = var.mimir.gateway.ingress.pathType
+            }]
+          }]
+          tls = var.mimir.gateway.ingress.tls
         }
       }
     }

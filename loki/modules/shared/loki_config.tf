@@ -34,9 +34,11 @@ locals {
 
     }
     gateway = {
-      enabled   = var.loki.gateway.enabled
-      replicas  = var.loki.gateway.replicas
-      resources = var.loki.gateway.resources
+      enabled      = var.loki.gateway.enabled
+      replicas     = var.loki.gateway.replicas
+      resources    = var.loki.gateway.resources
+      nodeSelector = var.loki.gateway.nodeSelector
+      tolerations  = var.loki.gateway.tolerations
       ingress = {
         enabled     = var.loki.gateway.ingress.enabled
         annotations = var.loki.gateway.ingress.annotations
@@ -51,29 +53,39 @@ locals {
       }
     }
     write = {
-      enabled   = var.loki.write.enabled
-      replicas  = var.loki.write.replicas
-      resources = var.loki.write.resources
+      enabled      = var.loki.write.enabled
+      replicas     = var.loki.write.replicas
+      resources    = var.loki.write.resources
+      nodeSelector = var.loki.write.nodeSelector
+      tolerations  = var.loki.write.tolerations
     }
     backend = {
-      enabled   = var.loki.backend.enabled
-      replicas  = var.loki.backend.replicas
-      resources = var.loki.backend.resources
+      enabled      = var.loki.backend.enabled
+      replicas     = var.loki.backend.replicas
+      resources    = var.loki.backend.resources
+      nodeSelector = var.loki.backend.nodeSelector
+      tolerations  = var.loki.backend.tolerations
     }
     read = {
-      enabled   = var.loki.read.enabled
-      replicas  = var.loki.read.replicas
-      resources = var.loki.read.resources
+      enabled      = var.loki.read.enabled
+      replicas     = var.loki.read.replicas
+      resources    = var.loki.read.resources
+      nodeSelector = var.loki.read.nodeSelector
+      tolerations  = var.loki.read.tolerations
     }
     querier = {
-      enabled   = var.loki.querier.enabled
-      replicas  = var.loki.querier.replicas
-      resources = var.loki.querier.resources
+      enabled      = var.loki.querier.enabled
+      replicas     = var.loki.querier.replicas
+      resources    = var.loki.querier.resources
+      nodeSelector = var.loki.querier.nodeSelector
+      tolerations  = var.loki.querier.tolerations
     }
     ruler = {
-      enabled   = var.loki.ruler.enabled
-      replicas  = var.loki.ruler.replicas
-      resources = var.loki.ruler.resources
+      enabled      = var.loki.ruler.enabled
+      replicas     = var.loki.ruler.replicas
+      resources    = var.loki.ruler.resources
+      nodeSelector = var.loki.ruler.nodeSelector
+      tolerations  = var.loki.ruler.tolerations
     }
   }
 }

@@ -98,37 +98,53 @@ locals {
         zoneAwareReplication = var.mimir.ingester.zoneAwareReplication
         resources            = var.mimir.ingester.resources
         persistentVolume     = var.mimir.ingester.persistentVolume
+        nodeSelector         = var.mimir.ingester.nodeSelector
+        tolerations          = var.mimir.ingester.tolerations
       }
       store_gateway = {
         replicas             = var.mimir.store_gateway.replicas
         zoneAwareReplication = var.mimir.store_gateway.zoneAwareReplication
         resources            = var.mimir.store_gateway.resources
         persistentVolume     = var.mimir.store_gateway.persistentVolume
+        nodeSelector         = var.mimir.store_gateway.nodeSelector
+        tolerations          = var.mimir.store_gateway.tolerations
       }
       querier = {
-        replicas  = var.mimir.querier.replicas
-        resources = var.mimir.querier.resources
+        replicas     = var.mimir.querier.replicas
+        resources    = var.mimir.querier.resources
+        nodeSelector = var.mimir.querier.nodeSelector
+        tolerations  = var.mimir.querier.tolerations
       }
       ruler = {
-        replicas  = var.mimir.ruler.replicas
-        resources = var.mimir.ruler.resources
+        replicas     = var.mimir.ruler.replicas
+        resources    = var.mimir.ruler.resources
+        nodeSelector = var.mimir.ruler.nodeSelector
+        tolerations  = var.mimir.ruler.tolerations
       }
       compactor = {
-        replicas  = var.mimir.compactor.replicas
-        resources = var.mimir.compactor.resources
+        replicas     = var.mimir.compactor.replicas
+        resources    = var.mimir.compactor.resources
+        nodeSelector = var.mimir.compactor.nodeSelector
+        tolerations  = var.mimir.compactor.tolerations
       }
       alertmanager = {
-        replicas  = var.mimir.alertmanager.replicas
-        resources = var.mimir.alertmanager.resources
+        replicas     = var.mimir.alertmanager.replicas
+        resources    = var.mimir.alertmanager.resources
+        nodeSelector = var.mimir.alertmanager.nodeSelector
+        tolerations  = var.mimir.alertmanager.tolerations
       }
       distributor = {
-        replicas  = var.mimir.distributor.replicas
-        resources = var.mimir.distributor.resources
+        replicas     = var.mimir.distributor.replicas
+        resources    = var.mimir.distributor.resources
+        nodeSelector = var.mimir.distributor.nodeSelector
+        tolerations  = var.mimir.distributor.tolerations
       }
       gateway = {
-        enabled   = var.mimir.gateway.enabled
-        replicas  = var.mimir.gateway.replicas
-        resources = var.mimir.gateway.resources
+        enabled      = var.mimir.gateway.enabled
+        replicas     = var.mimir.gateway.replicas
+        resources    = var.mimir.gateway.resources
+        nodeSelector = var.mimir.gateway.nodeSelector
+        tolerations  = var.mimir.gateway.tolerations
         ingress = {
           enabled     = var.mimir.gateway.ingress.enabled
           annotations = var.mimir.gateway.ingress.annotations

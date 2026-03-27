@@ -26,9 +26,11 @@ locals {
       pathType    = var.grafana.ingress.pathType
       tls         = var.grafana.ingress.tls
     }
-    plugins     = var.grafana.plugins
-    datasources = var.grafana.datasources
-    alerting    = var.grafana.alerting
-    dashboards  = var.grafana.dashboards
+    plugins      = var.grafana.plugins
+    datasources  = var.grafana.datasources
+    alerting     = var.grafana.alerting
+    dashboards   = var.grafana.dashboards
+    nodeSelector = var.grafana.nodeSelector
+    tolerations  = var.grafana.tolerations
   }
 }

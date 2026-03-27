@@ -85,6 +85,14 @@ variable "loki" {
           memory = optional(string, "200Mi")
         }), {})
       }), {})
+      nodeSelector = optional(map(string), {})
+      tolerations = optional(list(object({
+        key               = optional(string)
+        operator          = optional(string)
+        value             = optional(string)
+        effect            = optional(string)
+        tolerationSeconds = optional(number)
+      })), [])
     }), {})
     write = optional(object({
       enabled  = optional(bool, true)
@@ -99,6 +107,14 @@ variable "loki" {
           memory = optional(string, "512Mi")
         }), {})
       }), {})
+      nodeSelector = optional(map(string), {})
+      tolerations = optional(list(object({
+        key               = optional(string)
+        operator          = optional(string)
+        value             = optional(string)
+        effect            = optional(string)
+        tolerationSeconds = optional(number)
+      })), [])
     }), {})
     read = optional(object({
       enabled  = optional(bool, true)
@@ -113,6 +129,14 @@ variable "loki" {
           memory = optional(string, "200Mi")
         }), {})
       }), {})
+      nodeSelector = optional(map(string), {})
+      tolerations = optional(list(object({
+        key               = optional(string)
+        operator          = optional(string)
+        value             = optional(string)
+        effect            = optional(string)
+        tolerationSeconds = optional(number)
+      })), [])
     }), {})
     backend = optional(object({
       enabled  = optional(bool, true)
@@ -127,6 +151,14 @@ variable "loki" {
           memory = optional(string, "200Mi")
         }), {})
       }), {})
+      nodeSelector = optional(map(string), {})
+      tolerations = optional(list(object({
+        key               = optional(string)
+        operator          = optional(string)
+        value             = optional(string)
+        effect            = optional(string)
+        tolerationSeconds = optional(number)
+      })), [])
     }), {})
     gateway = optional(object({
       enabled  = optional(bool, true)
@@ -141,6 +173,14 @@ variable "loki" {
           memory = optional(string, "200Mi")
         }), {})
       }), {})
+      nodeSelector = optional(map(string), {})
+      tolerations = optional(list(object({
+        key               = optional(string)
+        operator          = optional(string)
+        value             = optional(string)
+        effect            = optional(string)
+        tolerationSeconds = optional(number)
+      })), [])
       ingress = optional(object({
         enabled     = optional(bool, false)
         annotations = optional(map(string), {})
@@ -166,6 +206,14 @@ variable "loki" {
           memory = optional(string, "200Mi")
         }), {})
       }), {})
+      nodeSelector = optional(map(string), {})
+      tolerations = optional(list(object({
+        key               = optional(string)
+        operator          = optional(string)
+        value             = optional(string)
+        effect            = optional(string)
+        tolerationSeconds = optional(number)
+      })), [])
     }), {})
   })
   description = "The Loki configuration"

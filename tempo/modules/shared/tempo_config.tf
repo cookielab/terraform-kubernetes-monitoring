@@ -38,11 +38,15 @@ locals {
       replicas             = var.tempo.ingester.replicas
       zoneAwareReplication = var.tempo.ingester.zoneAwareReplication
       resources            = var.tempo.ingester.resources
+      nodeSelector         = var.tempo.ingester.nodeSelector
+      tolerations          = var.tempo.ingester.tolerations
     }
     gateway = {
-      enabled   = var.tempo.gateway.enabled
-      replicas  = var.tempo.gateway.replicas
-      resources = var.tempo.gateway.resources
+      enabled      = var.tempo.gateway.enabled
+      replicas     = var.tempo.gateway.replicas
+      resources    = var.tempo.gateway.resources
+      nodeSelector = var.tempo.gateway.nodeSelector
+      tolerations  = var.tempo.gateway.tolerations
       ingress = {
         enabled     = var.tempo.gateway.ingress.enabled
         annotations = var.tempo.gateway.ingress.annotations
@@ -57,9 +61,11 @@ locals {
       }
     }
     querier = {
-      enabled   = var.tempo.querier.enabled
-      replicas  = var.tempo.querier.replicas
-      resources = var.tempo.querier.resources
+      enabled      = var.tempo.querier.enabled
+      replicas     = var.tempo.querier.replicas
+      resources    = var.tempo.querier.resources
+      nodeSelector = var.tempo.querier.nodeSelector
+      tolerations  = var.tempo.querier.tolerations
     }
     traces = {
       otlp = {
@@ -75,6 +81,8 @@ locals {
       enabled        = var.tempo.metricsGenerator.enabled
       remoteWriteUrl = var.tempo.metricsGenerator.remoteWriteUrl
       resources      = var.tempo.metricsGenerator.resources
+      nodeSelector   = var.tempo.metricsGenerator.nodeSelector
+      tolerations    = var.tempo.metricsGenerator.tolerations
     }
     overrides = {
       defaults = {

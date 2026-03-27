@@ -16,6 +16,9 @@ This directory contains Terraform modules for deploying Grafana Mimir backed by 
 - `namespace` - The namespace to deploy the mimir service to
 - `storage_prefix` - The prefix for the storage bucket
 - `mimir` - The mimir configuration
+  - Each component (`ingester`, `store_gateway`, `querier`, `ruler`, `compactor`, `alertmanager`, `distributor`, `gateway`) supports:
+    - `nodeSelector` - Node selector labels to constrain scheduling (default: `{}`)
+    - `tolerations` - List of tolerations for tainted nodes (default: `[]`)
 
 
 

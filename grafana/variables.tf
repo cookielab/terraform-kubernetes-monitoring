@@ -41,6 +41,14 @@ variable "grafana" {
     datasources = optional(map(any), {})
     alerting    = optional(map(any), {})
     dashboards  = optional(map(any), {})
+    nodeSelector = optional(map(string), {})
+    tolerations = optional(list(object({
+      key               = optional(string)
+      operator          = optional(string)
+      value             = optional(string)
+      effect            = optional(string)
+      tolerationSeconds = optional(number)
+    })), [])
   })
   default     = {}
   description = "The grafana configuration"

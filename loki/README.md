@@ -15,6 +15,9 @@ This directory contains Terraform modules for deploying Grafana Loki backed by s
 - `namespace` - The namespace to deploy the loki service to
 - `storage_prefix` - The prefix for the storage bucket
 - `loki` - The loki configuration
+  - Each component (`write`, `read`, `backend`, `gateway`, `querier`, `ruler`) supports:
+    - `nodeSelector` - Node selector labels to constrain scheduling (default: `{}`)
+    - `tolerations` - List of tolerations for tainted nodes (default: `[]`)
 
 ### GCP Variables
 

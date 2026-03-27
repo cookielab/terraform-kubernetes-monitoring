@@ -84,6 +84,14 @@ variable "tempo" {
           memory = optional(string, "100Mi")
         }), {})
       }), {})
+      nodeSelector = optional(map(string), {})
+      tolerations = optional(list(object({
+        key               = optional(string)
+        operator          = optional(string)
+        value             = optional(string)
+        effect            = optional(string)
+        tolerationSeconds = optional(number)
+      })), [])
     }), {})
     ingester = optional(object({
       replicas = optional(number, 2)
@@ -100,6 +108,14 @@ variable "tempo" {
           memory = optional(string, "256Mi")
         }), {})
       }), {})
+      nodeSelector = optional(map(string), {})
+      tolerations = optional(list(object({
+        key               = optional(string)
+        operator          = optional(string)
+        value             = optional(string)
+        effect            = optional(string)
+        tolerationSeconds = optional(number)
+      })), [])
     }), {})
     gateway = optional(object({
       enabled  = optional(bool, true)
@@ -114,6 +130,14 @@ variable "tempo" {
           memory = optional(string, "100Mi")
         }), {})
       }), {})
+      nodeSelector = optional(map(string), {})
+      tolerations = optional(list(object({
+        key               = optional(string)
+        operator          = optional(string)
+        value             = optional(string)
+        effect            = optional(string)
+        tolerationSeconds = optional(number)
+      })), [])
       ingress = optional(object({
         enabled     = optional(bool, false)
         annotations = optional(map(string), {})
@@ -139,6 +163,14 @@ variable "tempo" {
           memory = optional(string, "100Mi")
         }), {})
       }), {})
+      nodeSelector = optional(map(string), {})
+      tolerations = optional(list(object({
+        key               = optional(string)
+        operator          = optional(string)
+        value             = optional(string)
+        effect            = optional(string)
+        tolerationSeconds = optional(number)
+      })), [])
     }), {})
     traces = optional(object({
       otlp = optional(object({

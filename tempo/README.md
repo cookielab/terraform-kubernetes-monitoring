@@ -20,11 +20,20 @@ This directory contains Terraform modules for deploying Tempo backed by storage 
   - `ingester` - The ingester configuration
     - `replicas` - The number of ingester replicas to deploy
     - `zoneAwareReplication` - The zone aware replication configuration
+    - `nodeSelector` - Node selector labels to constrain scheduling (default: `{}`)
+    - `tolerations` - List of tolerations for tainted nodes (default: `[]`)
   - `gateway` - The gateway configuration
     - `enabled` - If enabled, a gateway will be deployed
+    - `nodeSelector` - Node selector labels to constrain scheduling (default: `{}`)
+    - `tolerations` - List of tolerations for tainted nodes (default: `[]`)
+  - `querier` - The querier configuration
+    - `nodeSelector` - Node selector labels to constrain scheduling (default: `{}`)
+    - `tolerations` - List of tolerations for tainted nodes (default: `[]`)
   - `metricsGenerator` - The metrics generator configuration
     - `enabled` - If enabled, a metrics generator will be deployed
     - `remoteWriteUrl` - The remote write URL to send the metrics to
+    - `nodeSelector` - Node selector labels to constrain scheduling (default: `{}`)
+    - `tolerations` - List of tolerations for tainted nodes (default: `[]`)
 ### GCP Variables
 
 - `project_id` - The GCP project ID

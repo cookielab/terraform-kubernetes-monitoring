@@ -88,6 +88,14 @@ variable "mimir" {
           memory = optional(string, "512Mi")
         }), {})
       }), {})
+      nodeSelector = optional(map(string), {})
+      tolerations = optional(list(object({
+        key               = optional(string)
+        operator          = optional(string)
+        value             = optional(string)
+        effect            = optional(string)
+        tolerationSeconds = optional(number)
+      })), [])
     }), {})
     store_gateway = optional(object({
       replicas = optional(number, 1)
@@ -108,6 +116,14 @@ variable "mimir" {
           memory = optional(string, "200Mi")
         }), {})
       }), {})
+      nodeSelector = optional(map(string), {})
+      tolerations = optional(list(object({
+        key               = optional(string)
+        operator          = optional(string)
+        value             = optional(string)
+        effect            = optional(string)
+        tolerationSeconds = optional(number)
+      })), [])
     }), {})
     querier = optional(object({
       replicas = optional(number, 2)
@@ -121,6 +137,14 @@ variable "mimir" {
           memory = optional(string, "200Mi")
         }), {})
       }), {})
+      nodeSelector = optional(map(string), {})
+      tolerations = optional(list(object({
+        key               = optional(string)
+        operator          = optional(string)
+        value             = optional(string)
+        effect            = optional(string)
+        tolerationSeconds = optional(number)
+      })), [])
     }), {})
     ruler = optional(object({
       replicas = optional(number, 1)
@@ -134,6 +158,14 @@ variable "mimir" {
           memory = optional(string, "200Mi")
         }), {})
       }), {})
+      nodeSelector = optional(map(string), {})
+      tolerations = optional(list(object({
+        key               = optional(string)
+        operator          = optional(string)
+        value             = optional(string)
+        effect            = optional(string)
+        tolerationSeconds = optional(number)
+      })), [])
     }), {})
     compactor = optional(object({
       replicas = optional(number, 1)
@@ -147,6 +179,14 @@ variable "mimir" {
           memory = optional(string, "200Mi")
         }), {})
       }), {})
+      nodeSelector = optional(map(string), {})
+      tolerations = optional(list(object({
+        key               = optional(string)
+        operator          = optional(string)
+        value             = optional(string)
+        effect            = optional(string)
+        tolerationSeconds = optional(number)
+      })), [])
     }), {})
     alertmanager = optional(object({
       replicas = optional(number, 1)
@@ -160,6 +200,14 @@ variable "mimir" {
           memory = optional(string, "200Mi")
         }), {})
       }), {})
+      nodeSelector = optional(map(string), {})
+      tolerations = optional(list(object({
+        key               = optional(string)
+        operator          = optional(string)
+        value             = optional(string)
+        effect            = optional(string)
+        tolerationSeconds = optional(number)
+      })), [])
     }), {})
     distributor = optional(object({
       replicas = optional(number, 1)
@@ -173,6 +221,14 @@ variable "mimir" {
           memory = optional(string, "200Mi")
         }), {})
       }), {})
+      nodeSelector = optional(map(string), {})
+      tolerations = optional(list(object({
+        key               = optional(string)
+        operator          = optional(string)
+        value             = optional(string)
+        effect            = optional(string)
+        tolerationSeconds = optional(number)
+      })), [])
     }), {})
     gateway = optional(object({
       enabled  = optional(bool, true)
@@ -187,6 +243,14 @@ variable "mimir" {
           memory = optional(string, "200Mi")
         }), {})
       }), {})
+      nodeSelector = optional(map(string), {})
+      tolerations = optional(list(object({
+        key               = optional(string)
+        operator          = optional(string)
+        value             = optional(string)
+        effect            = optional(string)
+        tolerationSeconds = optional(number)
+      })), [])
       ingress = optional(object({
         enabled     = optional(bool, false)
         annotations = optional(map(string), {})

@@ -49,12 +49,28 @@ variable "tempo" {
       enabled        = optional(bool, true)
       remoteWriteUrl = optional(string, "")
       processors     = optional(list(string), ["service-graphs", "span-metrics"])
+      nodeSelector = optional(map(string), {})
+      tolerations = optional(list(object({
+        key               = optional(string)
+        operator          = optional(string)
+        value             = optional(string)
+        effect            = optional(string)
+        tolerationSeconds = optional(number)
+      })), [])
     }), {})
     ingester = optional(object({
       replicas = optional(number, 2)
       zoneAwareReplication = optional(object({
         enabled = optional(bool, false)
       }), {})
+      nodeSelector = optional(map(string), {})
+      tolerations = optional(list(object({
+        key               = optional(string)
+        operator          = optional(string)
+        value             = optional(string)
+        effect            = optional(string)
+        tolerationSeconds = optional(number)
+      })), [])
     }), {})
     gateway = optional(object({
       enabled  = optional(bool, true)
@@ -69,6 +85,14 @@ variable "tempo" {
           memory = optional(string, "100Mi")
         }), {})
       }), {})
+      nodeSelector = optional(map(string), {})
+      tolerations = optional(list(object({
+        key               = optional(string)
+        operator          = optional(string)
+        value             = optional(string)
+        effect            = optional(string)
+        tolerationSeconds = optional(number)
+      })), [])
       ingress = optional(object({
         enabled     = optional(bool, false)
         annotations = optional(map(string), {})
@@ -82,7 +106,15 @@ variable "tempo" {
       }), {})
     }), {})
     querier = optional(object({
-      enabled = optional(bool, true)
+      enabled      = optional(bool, true)
+      nodeSelector = optional(map(string), {})
+      tolerations = optional(list(object({
+        key               = optional(string)
+        operator          = optional(string)
+        value             = optional(string)
+        effect            = optional(string)
+        tolerationSeconds = optional(number)
+      })), [])
     }), {})
     traces = optional(object({
       otlp = optional(object({

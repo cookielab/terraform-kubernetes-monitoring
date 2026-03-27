@@ -49,6 +49,16 @@ variable "tempo" {
       enabled        = optional(bool, true)
       remoteWriteUrl = optional(string, "")
       processors     = optional(list(string), ["service-graphs", "span-metrics"])
+      resources = optional(object({
+        requests = optional(object({
+          cpu    = optional(string, "100m")
+          memory = optional(string, "100Mi")
+        }), {})
+        limits = optional(object({
+          cpu    = optional(string, "100m")
+          memory = optional(string, "100Mi")
+        }), {})
+      }), {})
       nodeSelector = optional(map(string), {})
       tolerations = optional(list(object({
         key               = optional(string)
@@ -62,6 +72,16 @@ variable "tempo" {
       replicas = optional(number, 2)
       zoneAwareReplication = optional(object({
         enabled = optional(bool, false)
+      }), {})
+      resources = optional(object({
+        requests = optional(object({
+          cpu    = optional(string, "100m")
+          memory = optional(string, "256Mi")
+        }), {})
+        limits = optional(object({
+          cpu    = optional(string, "100m")
+          memory = optional(string, "256Mi")
+        }), {})
       }), {})
       nodeSelector = optional(map(string), {})
       tolerations = optional(list(object({
@@ -106,7 +126,18 @@ variable "tempo" {
       }), {})
     }), {})
     querier = optional(object({
-      enabled      = optional(bool, true)
+      enabled  = optional(bool, true)
+      replicas = optional(number, 1)
+      resources = optional(object({
+        requests = optional(object({
+          cpu    = optional(string, "100m")
+          memory = optional(string, "100Mi")
+        }), {})
+        limits = optional(object({
+          cpu    = optional(string, "100m")
+          memory = optional(string, "100Mi")
+        }), {})
+      }), {})
       nodeSelector = optional(map(string), {})
       tolerations = optional(list(object({
         key               = optional(string)

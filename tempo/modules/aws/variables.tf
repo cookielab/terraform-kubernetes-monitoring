@@ -48,7 +48,7 @@ variable "tempo" {
     metricsGenerator = optional(object({
       enabled        = optional(bool, true)
       remoteWriteUrl = optional(string, "")
-      processors     = optional(list(string), ["service-graphs", "span-metrics"])
+      processors     = optional(list(string), ["service-graphs", "span-metrics", "local-blocks"])
       resources = optional(object({
         requests = optional(object({
           cpu    = optional(string, "100m")

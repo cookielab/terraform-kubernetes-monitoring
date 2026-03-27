@@ -83,6 +83,13 @@ locals {
       resources      = var.tempo.metricsGenerator.resources
       nodeSelector   = var.tempo.metricsGenerator.nodeSelector
       tolerations    = var.tempo.metricsGenerator.tolerations
+      config = {
+        processor = {
+          local_blocks = {
+            filter_server_spans = false
+          }
+        }
+      }
     }
     overrides = {
       defaults = {

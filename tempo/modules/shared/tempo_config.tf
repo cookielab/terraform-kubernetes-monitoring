@@ -21,6 +21,7 @@ locals {
     }
   }
   tempo_config = {
+    multitenancyEnabled = var.tempo.multitenancyEnabled
     serviceAccount = {
       name        = var.tempo.serviceAccount.name
       create      = var.tempo.serviceAccount.create

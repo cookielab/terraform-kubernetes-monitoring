@@ -40,6 +40,7 @@ variable "aws_region" {
 
 variable "tempo" {
   type = object({
+    multitenancyEnabled = optional(bool, false)
     serviceAccount = optional(object({
       name        = optional(string, "tempo")
       create      = optional(bool, true)

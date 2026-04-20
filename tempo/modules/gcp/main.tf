@@ -4,7 +4,7 @@ locals {
 
 module "tempo_gcs" {
   source  = "terraform-google-modules/cloud-storage/google"
-  version = "~> 10.0"
+  version = "12.3.0"
 
   project_id = var.project_id
   location   = var.storage_location

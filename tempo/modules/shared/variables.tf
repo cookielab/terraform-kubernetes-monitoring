@@ -193,6 +193,12 @@ variable "tempo" {
   default     = {}
 }
 
+variable "use_vpc_endpoint" {
+  type        = bool
+  description = "Use regional S3 endpoint to route traffic through the S3 VPC Gateway Endpoint instead of the global endpoint"
+  default     = false
+}
+
 variable "otel_collector" {
   type = object({
     name      = optional(string, "grafana-alloy-otel-collector")

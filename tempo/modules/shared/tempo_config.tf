@@ -14,7 +14,7 @@ locals {
         backend = "s3"
         s3 = {
           bucket   = "${var.storage_prefix}${var.storage_bucket_name["${local.bucket_prefix}traces"]}"
-          endpoint = "s3.amazonaws.com"
+          endpoint = var.use_vpc_endpoint ? "s3.${var.aws_region}.amazonaws.com" : "s3.amazonaws.com"
           region   = var.aws_region
         }
       }

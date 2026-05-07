@@ -101,10 +101,12 @@ resource "aws_eks_pod_identity_association" "tempo" {
 module "tempo" {
   source = "../shared"
 
-  cloud_provider = var.cloud_provider
-  namespace      = var.namespace
-  otel_collector = var.otel_collector
-  storage_prefix = var.storage_prefix
+  cloud_provider   = var.cloud_provider
+  namespace        = var.namespace
+  otel_collector   = var.otel_collector
+  storage_prefix   = var.storage_prefix
+  aws_region       = var.aws_region
+  use_vpc_endpoint = var.use_vpc_endpoint
   tempo = merge(var.tempo, {
     serviceAccount = merge(var.tempo.serviceAccount, {
       annotations = var.use_pod_identity ? var.tempo.serviceAccount.annotations : merge(

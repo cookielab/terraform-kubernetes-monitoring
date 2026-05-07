@@ -190,6 +190,12 @@ variable "use_pod_identity" {
   default     = false
 }
 
+variable "use_vpc_endpoint" {
+  type        = bool
+  description = "Use regional S3 endpoint to route traffic through the S3 VPC Gateway Endpoint instead of the global endpoint"
+  default     = false
+}
+
 variable "cluster_name" {
   type        = string
   description = "The EKS cluster name (required when use_pod_identity is true)"

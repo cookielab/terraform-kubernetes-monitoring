@@ -25,7 +25,7 @@ variable "namespace" {
 variable "mimir_helm_version" {
   type        = string
   description = "The version of the mimir helm chart to use"
-  default     = "5.8.0-weekly.335"
+  default     = "6.0.6"
 }
 
 variable "helm_release_name" {
@@ -262,6 +262,12 @@ variable "mimir" {
           hosts      = optional(list(string), [""])
         })), [])
       }), {})
+    }), {})
+    kafka = optional(object({
+      enabled = optional(bool, false)
+    }), {})
+    ingest_storage = optional(object({
+      enabled = optional(bool, false)
     }), {})
     runtimeConfig = optional(map(any), {})
   })

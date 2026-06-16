@@ -65,6 +65,9 @@ locals {
       minio = {
         enabled = false
       }
+      kafka = {
+        enabled = var.mimir.kafka.enabled
+      }
       serviceAccount = {
         name        = local.mimir_service_account_name
         create      = true
@@ -81,6 +84,12 @@ locals {
                   region   = var.aws_region
                 } : {}
               }
+            }
+            ingest_storage = {
+              enabled = var.mimir.ingest_storage.enabled
+            }
+            ingester = {
+              push_grpc_method_enabled = !var.mimir.ingest_storage.enabled
             }
           },
           { for key, value in local.storage_configs :

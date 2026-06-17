@@ -25,7 +25,7 @@ variable "namespace" {
 variable "tempo_helm_version" {
   type        = string
   description = "The version of the tempo helm chart to use"
-  default     = "1.34.0"
+  default     = "2.25.2"
 }
 
 variable "helm_release_name" {

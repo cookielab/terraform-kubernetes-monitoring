@@ -206,3 +206,9 @@ variable "cluster_name" {
     error_message = "cluster_name must be set when use_pod_identity is true."
   }
 }
+
+variable "tempo_extra" {
+  type        = map(any)
+  description = "Additional Helm values for tempo-distributed chart, merged after the generated config"
+  default     = {}
+}

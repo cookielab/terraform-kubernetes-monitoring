@@ -6,5 +6,5 @@ resource "helm_release" "tempo" {
   version          = var.tempo_helm_version
   create_namespace = true
 
-  values = [yamlencode(local.tempo_config)]
+  values = [yamlencode(local.tempo_config), yamlencode(var.tempo_extra)]
 }

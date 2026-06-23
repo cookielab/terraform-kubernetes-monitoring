@@ -119,4 +119,5 @@ module "tempo" {
     for bucket in var.buckets :
     "${local.bucket_prefix}${bucket}" => "${local.bucket_prefix}${bucket}"
   }
+  tempo_extra = var.tempo_extra
 }

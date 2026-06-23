@@ -254,3 +254,9 @@ variable "mimir" {
   description = "The mimir configuration"
   default     = {}
 }
+
+variable "mimir_extra" {
+  type        = map(any)
+  description = "Additional Helm values for mimir-distributed chart, merged after the generated config"
+  default     = {}
+}

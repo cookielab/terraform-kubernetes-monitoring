@@ -46,4 +46,5 @@ module "mimir" {
     for bucket in var.buckets :
     "${local.bucket_prefix}${bucket}" => module.mimir_gcs.names["${local.bucket_prefix}${bucket}"]
   }
+  mimir_extra = var.mimir_extra
 }

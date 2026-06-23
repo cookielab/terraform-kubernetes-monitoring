@@ -179,7 +179,7 @@ variable "otel_collector" {
 }
 
 variable "tempo_extra" {
-  type        = map(any)
+  type        = any
   description = "Additional Helm values for tempo-distributed chart, merged after the generated config"
   default     = {}
 }

@@ -6,7 +6,7 @@ resource "helm_release" "mimir" {
   version          = var.mimir_helm_version
   create_namespace = true
 
-  values = [yamlencode(local.mimir_config)]
+  values = [yamlencode(local.mimir_config), yamlencode(var.mimir_extra)]
 }
 
 

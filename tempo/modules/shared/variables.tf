@@ -208,3 +208,8 @@ variable "otel_collector" {
   description = "The otel collector configuration"
 }
 
+variable "tempo_extra" {
+  type        = any
+  description = "Additional Helm values for tempo-distributed chart, merged after the generated config"
+  default     = {}
+}

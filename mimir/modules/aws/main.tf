@@ -117,4 +117,5 @@ module "mimir" {
     for bucket in var.buckets :
     "${local.bucket_prefix}${bucket}" => "${local.bucket_prefix}${bucket}"
   }
+  mimir_extra = var.mimir_extra
 }

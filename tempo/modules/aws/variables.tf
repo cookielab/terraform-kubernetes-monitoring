@@ -168,6 +168,12 @@ variable "tempo" {
   default     = {}
 }
 
+variable "tempo_helm_version" {
+  type        = string
+  description = "The version of the tempo helm chart to use"
+  default     = "2.25.2"
+}
+
 variable "namespace" {
   type        = string
   description = "The namespace to deploy the tempo service to"

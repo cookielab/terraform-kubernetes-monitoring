@@ -39,3 +39,29 @@ Each module's `aws/` submodule supports both IRSA and EKS Pod Identity for IAM a
 - For OTel collector, we recommend use our Grafana alloy modules
     - OTel collector: https://github.com/cookielab/terraform-kubernetes-grafana-alloy/tree/main/modules/otel-collector
 
+
+<!-- BEGIN_TF_DOCS -->
+## Requirements
+
+No requirements.
+
+## Providers
+
+No providers.
+
+## Modules
+
+No modules.
+
+## Resources
+
+No resources.
+
+## Inputs
+
+No inputs.
+
+## Outputs
+
+No outputs.
+<!-- END_TF_DOCS -->

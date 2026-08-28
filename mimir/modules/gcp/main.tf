@@ -35,13 +35,14 @@ resource "google_storage_bucket_iam_binding" "gcs_rw_member" {
 module "mimir" {
   source = "../shared"
 
-  cloud_provider   = var.cloud_provider
-  project_id       = var.project_id
-  storage_location = var.storage_location
-  mimir            = var.mimir
-  rw_bucket_roles  = var.rw_bucket_roles
-  namespace        = var.namespace
-  storage_prefix   = var.storage_prefix
+  cloud_provider     = var.cloud_provider
+  project_id         = var.project_id
+  storage_location   = var.storage_location
+  mimir              = var.mimir
+  mimir_helm_version = var.mimir_helm_version
+  rw_bucket_roles    = var.rw_bucket_roles
+  namespace          = var.namespace
+  storage_prefix     = var.storage_prefix
   storage_bucket_name = {
     for bucket in var.buckets :
     "${local.bucket_prefix}${bucket}" => module.mimir_gcs.names["${local.bucket_prefix}${bucket}"]

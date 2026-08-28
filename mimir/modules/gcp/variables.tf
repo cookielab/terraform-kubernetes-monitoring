@@ -37,6 +37,12 @@ variable "namespace" {
   description = "The namespace to deploy the mimir service to"
   default     = "monitoring"
 }
+
+variable "mimir_helm_version" {
+  type        = string
+  description = "The version of the mimir helm chart to use"
+  default     = "6.0.6"
+}
 variable "mimir" {
   type = object({
     serviceAccount = optional(object({
@@ -229,6 +235,12 @@ variable "mimir" {
           hosts      = optional(list(string), [""])
         })), [])
       }), {})
+    }), {})
+    kafka = optional(object({
+      enabled = optional(bool, false)
+    }), {})
+    ingest_storage = optional(object({
+      enabled = optional(bool, false)
     }), {})
     runtimeConfig = optional(map(any), {})
   })

@@ -21,6 +21,10 @@ This directory contains Terraform modules for deploying observability tools on K
     - Storage for traces
     - Gateway with ingress support
     - Outputs: `tempo_gateway_url`, `tempo_otlp_grpc_url`, `tempo_otlp_http_url`
+- `pyroscope/` - Grafana Pyroscope
+    - Storage for continuous profiles
+    - Microservices mode with ingress support
+    - Outputs: `pyroscope_url`, `pyroscope_write_url`
 
 Each module's `aws/` submodule supports both IRSA and EKS Pod Identity for IAM authentication.
 

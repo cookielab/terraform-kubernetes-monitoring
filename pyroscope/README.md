@@ -16,10 +16,14 @@ This directory contains Terraform modules for deploying Grafana Pyroscope (conti
   - `multitenancyEnabled` - Require `X-Scope-OrgID` header on push and query
   - `serviceAccount` - Service account shared by all components
   - `metastore.persistence` - PVC for the v2 metastore raft log (enabled by default, `10Gi`)
-  - `ingress` - Ingress routing UI/query paths to `query-frontend` and push paths to `distributor`
+  - `ingress` - Ingress routing UI/query paths to `query-frontend` and push paths to `distributor` (to the gateway when it is enabled)
+  - `gateway` - nginx in front of the components, rendered via the chart's `extraObjects` (the chart has no gateway of its own)
+    - `enabled` - Deploy the gateway and point the ingress at it (default: `false`)
+    - `replicas`, `image`, `resources` - Gateway deployment settings
+    - `basicAuth.existingSecret` - Secret with an `.htpasswd` key; when set, every path except `/ready` requires basic auth
   - `nodeSelector` - Node selector labels applied to all components (default: `{}`)
   - `tolerations` - Tolerations applied to all components (default: `[]`)
-- `pyroscope_extra` - Raw Helm values merged after the generated config, e.g. per-component replicas/resources under `pyroscope.components.<name>`
+- `pyroscope_extra` - Raw Helm values merged after the generated config, e.g. per-component replicas/resources under `pyroscope.components.<name>` (setting `extraObjects` here replaces the gateway objects)
 
 ### AWS Variables
 

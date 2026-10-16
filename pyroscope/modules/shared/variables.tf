@@ -47,6 +47,18 @@ variable "pyroscope" {
         hosts      = optional(list(string))
       })), [])
     }), {})
+    gateway = optional(object({
+      enabled  = optional(bool, false)
+      replicas = optional(number, 2)
+      image    = optional(string, "docker.io/nginxinc/nginx-unprivileged:1.29-alpine")
+      resources = optional(object({
+        requests = optional(map(string), { cpu = "50m", memory = "64Mi" })
+        limits   = optional(map(string), { memory = "128Mi" })
+      }), {})
+      basicAuth = optional(object({
+        existingSecret = optional(string)
+      }), {})
+    }), {})
     nodeSelector = optional(map(string), {})
     tolerations = optional(list(object({
       key               = optional(string)

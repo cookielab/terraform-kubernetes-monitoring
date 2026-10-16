@@ -16,10 +16,14 @@ This directory contains Terraform modules for deploying Grafana Pyroscope (conti
   - `multitenancyEnabled` - Require `X-Scope-OrgID` header on push and query
   - `serviceAccount` - Service account shared by all components
   - `metastore.persistence` - PVC for the v2 metastore raft log (enabled by default, `10Gi`)
-  - `ingress` - Ingress routing UI/query paths to `query-frontend` and push paths to `distributor`
+  - `gateway` - nginx in front of the components (the chart has no gateway of its own; rendered via the chart's `extraObjects`)
+    - `enabled` - Deploy the gateway (default: `true`)
+    - `replicas`, `image`, `resources`, `nodeSelector`, `tolerations` - Gateway deployment settings
+    - `basicAuth.existingSecret` - Secret with an `.htpasswd` key; when set, every path except `/ready` requires basic auth
+    - `ingress` - Ingress to the gateway (`enabled`, `annotations`, `hosts`, `path`, `pathType`, `tls`)
   - `nodeSelector` - Node selector labels applied to all components (default: `{}`)
   - `tolerations` - Tolerations applied to all components (default: `[]`)
-- `pyroscope_extra` - Raw Helm values merged after the generated config, e.g. per-component replicas/resources under `pyroscope.components.<name>`
+- `pyroscope_extra` - Raw Helm values merged after the generated config, e.g. per-component replicas/resources under `pyroscope.components.<name>` (setting `extraObjects` here replaces the gateway objects)
 
 ### AWS Variables
 
@@ -31,7 +35,7 @@ This directory contains Terraform modules for deploying Grafana Pyroscope (conti
 
 ## Outputs
 
-- `pyroscope_url` - Query URL (ingress if enabled, otherwise `query-frontend` service)
+- `pyroscope_url` - Query URL (gateway ingress if enabled, otherwise the gateway service, otherwise `query-frontend`)
 - `pyroscope_write_url` - In-cluster push URL (`distributor` service), for Alloy `pyroscope.write`
 
 The chart's bundled Alloy is disabled; collect profiles with https://github.com/cookielab/terraform-kubernetes-grafana-alloy.

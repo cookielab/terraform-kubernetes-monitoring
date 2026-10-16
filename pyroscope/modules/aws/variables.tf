@@ -77,16 +77,46 @@ variable "pyroscope" {
         storageClassName = optional(string)
       }), {})
     }), {})
-    ingress = optional(object({
-      enabled     = optional(bool, false)
-      className   = optional(string, "")
-      annotations = optional(map(string), {})
-      hosts       = optional(list(string), [])
-      pathType    = optional(string, "Prefix")
-      tls = optional(list(object({
-        secretName = optional(string)
-        hosts      = optional(list(string))
+    gateway = optional(object({
+      enabled  = optional(bool, true)
+      replicas = optional(number, 1)
+      image = optional(object({
+        registry   = optional(string, "docker.io")
+        repository = optional(string, "nginxinc/nginx-unprivileged")
+        tag        = optional(string, "1.29-alpine")
+      }), {})
+      resources = optional(object({
+        requests = optional(object({
+          cpu    = optional(string, "100m")
+          memory = optional(string, "100Mi")
+        }), {})
+        limits = optional(object({
+          cpu    = optional(string, "100m")
+          memory = optional(string, "100Mi")
+        }), {})
+      }), {})
+      nodeSelector = optional(map(string), {})
+      tolerations = optional(list(object({
+        key               = optional(string)
+        operator          = optional(string)
+        value             = optional(string)
+        effect            = optional(string)
+        tolerationSeconds = optional(number)
       })), [])
+      basicAuth = optional(object({
+        existingSecret = optional(string)
+      }), {})
+      ingress = optional(object({
+        enabled     = optional(bool, false)
+        annotations = optional(map(string), {})
+        hosts       = optional(list(string), [])
+        path        = optional(string, "/")
+        pathType    = optional(string, "ImplementationSpecific")
+        tls = optional(list(object({
+          secretName = optional(string, "pyroscope-gateway-tls")
+          hosts      = optional(list(string), [""])
+        })), [])
+      }), {})
     }), {})
     nodeSelector = optional(map(string), {})
     tolerations = optional(list(object({

@@ -24,13 +24,13 @@ locals {
     alloy = {
       enabled = false
     }
+    # The chart ingress has no auth and needs per-component routing; the gateway owns ingress instead.
     ingress = {
-      enabled     = var.pyroscope.ingress.enabled
-      className   = var.pyroscope.ingress.className
-      annotations = var.pyroscope.ingress.annotations
-      hosts       = var.pyroscope.ingress.hosts
-      pathType    = var.pyroscope.ingress.pathType
-      tls         = var.pyroscope.ingress.tls
+      enabled = false
     }
+    extraObjects = [
+      for object in concat(local.gateway_objects, [local.gateway_ingress]) : object
+      if var.pyroscope.gateway.enabled && (object.kind != "Ingress" || var.pyroscope.gateway.ingress.enabled)
+    ]
   }
 }

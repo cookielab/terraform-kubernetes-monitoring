@@ -84,11 +84,11 @@ locals {
             annotations = { "checksum/config" = sha256(local.gateway_nginx_conf) }
           }
           spec = {
-            nodeSelector = var.pyroscope.nodeSelector
-            tolerations  = var.pyroscope.tolerations
+            nodeSelector = var.pyroscope.gateway.nodeSelector
+            tolerations  = var.pyroscope.gateway.tolerations
             containers = [{
               name      = "nginx"
-              image     = var.pyroscope.gateway.image
+              image     = "${var.pyroscope.gateway.image.registry}/${var.pyroscope.gateway.image.repository}:${var.pyroscope.gateway.image.tag}"
               ports     = [{ name = "http", containerPort = 8080 }]
               resources = var.pyroscope.gateway.resources
               readinessProbe = {
@@ -136,18 +136,17 @@ locals {
     metadata = {
       name        = local.gateway_name
       labels      = local.gateway_labels
-      annotations = var.pyroscope.ingress.annotations
+      annotations = var.pyroscope.gateway.ingress.annotations
     }
     spec = merge(
-      var.pyroscope.ingress.className != "" ? { ingressClassName = var.pyroscope.ingress.className } : {},
-      length(var.pyroscope.ingress.tls) > 0 ? { tls = var.pyroscope.ingress.tls } : {},
+      length(var.pyroscope.gateway.ingress.tls) > 0 ? { tls = var.pyroscope.gateway.ingress.tls } : {},
       {
-        rules = [for host in var.pyroscope.ingress.hosts : {
+        rules = [for host in var.pyroscope.gateway.ingress.hosts : {
           host = host
           http = {
             paths = [{
-              path     = "/"
-              pathType = var.pyroscope.ingress.pathType
+              path     = var.pyroscope.gateway.ingress.path
+              pathType = var.pyroscope.gateway.ingress.pathType
               backend  = { service = { name = local.gateway_name, port = { name = "http" } } }
             }]
           }

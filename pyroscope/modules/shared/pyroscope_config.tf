@@ -14,9 +14,6 @@ locals {
         metastore = {
           persistence = var.pyroscope.metastore.persistence
         }
-        # Chart ingress routes to per-component services only when
-        # len(pyroscope.components) > 1; with one key it targets a non-existent "pyroscope" service.
-        query-frontend = {}
       }
       structuredConfig = {
         multitenancy_enabled = var.pyroscope.multitenancyEnabled
@@ -27,18 +24,13 @@ locals {
     alloy = {
       enabled = false
     }
+    # The chart ingress has no auth and needs per-component routing; the gateway owns ingress instead.
     ingress = {
-      # With the gateway, the module renders its own ingress pointing at it.
-      enabled     = var.pyroscope.ingress.enabled && !var.pyroscope.gateway.enabled
-      className   = var.pyroscope.ingress.className
-      annotations = var.pyroscope.ingress.annotations
-      hosts       = var.pyroscope.ingress.hosts
-      pathType    = var.pyroscope.ingress.pathType
-      tls         = var.pyroscope.ingress.tls
+      enabled = false
     }
     extraObjects = [
       for object in concat(local.gateway_objects, [local.gateway_ingress]) : object
-      if var.pyroscope.gateway.enabled && (object.kind != "Ingress" || var.pyroscope.ingress.enabled)
+      if var.pyroscope.gateway.enabled && (object.kind != "Ingress" || var.pyroscope.gateway.ingress.enabled)
     ]
   }
 }

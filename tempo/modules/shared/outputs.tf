@@ -1,6 +1,6 @@
 locals {
-  tempo_protocol           = length(var.tempo.gateway.ingress.tls) > 0 ? "https" : "http"
-  tempo_base_url           = (
+  tempo_protocol = length(var.tempo.gateway.ingress.tls) > 0 ? "https" : "http"
+  tempo_base_url = (
     var.tempo.gateway.ingress.enabled && length(var.tempo.gateway.ingress.hosts) > 0
     ? "${local.tempo_protocol}://${var.tempo.gateway.ingress.hosts[0]}"
     : "http://tempo-gateway.${var.namespace}.svc.cluster.local:80"

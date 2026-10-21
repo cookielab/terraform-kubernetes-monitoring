@@ -101,10 +101,11 @@ resource "aws_eks_pod_identity_association" "mimir" {
 module "mimir" {
   source = "../shared"
 
-  cloud_provider = var.cloud_provider
-  namespace      = var.namespace
-  storage_prefix = var.storage_prefix
-  aws_region     = var.aws_region
+  cloud_provider     = var.cloud_provider
+  namespace          = var.namespace
+  storage_prefix     = var.storage_prefix
+  aws_region         = var.aws_region
+  mimir_helm_version = var.mimir_helm_version
   mimir = merge(var.mimir, {
     serviceAccount = merge(var.mimir.serviceAccount, {
       annotations = var.use_pod_identity ? var.mimir.serviceAccount.annotations : merge(

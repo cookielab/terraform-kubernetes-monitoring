@@ -36,13 +36,14 @@ resource "google_storage_bucket_iam_binding" "gcs_rw_member" {
 module "tempo" {
   source = "../shared"
 
-  cloud_provider   = var.cloud_provider
-  project_id       = var.project_id
-  storage_location = var.storage_location
-  rw_bucket_roles  = var.rw_bucket_roles
-  otel_collector   = var.otel_collector
-  tempo            = var.tempo
-  namespace        = var.namespace
+  cloud_provider     = var.cloud_provider
+  project_id         = var.project_id
+  storage_location   = var.storage_location
+  rw_bucket_roles    = var.rw_bucket_roles
+  otel_collector     = var.otel_collector
+  tempo              = var.tempo
+  namespace          = var.namespace
+  tempo_helm_version = var.tempo_helm_version
   storage_bucket_name = {
     for bucket in var.buckets :
     "${local.bucket_prefix}${bucket}" => module.tempo_gcs.names["${local.bucket_prefix}${bucket}"]

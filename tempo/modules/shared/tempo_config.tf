@@ -79,16 +79,18 @@ locals {
       }
     }
     metricsGenerator = {
-      enabled        = var.tempo.metricsGenerator.enabled
-      remoteWriteUrl = var.tempo.metricsGenerator.remoteWriteUrl
-      resources      = var.tempo.metricsGenerator.resources
-      nodeSelector   = var.tempo.metricsGenerator.nodeSelector
-      tolerations    = var.tempo.metricsGenerator.tolerations
+      enabled      = var.tempo.metricsGenerator.enabled
+      resources    = var.tempo.metricsGenerator.resources
+      nodeSelector = var.tempo.metricsGenerator.nodeSelector
+      tolerations  = var.tempo.metricsGenerator.tolerations
       config = {
         processor = {
           local_blocks = {
             filter_server_spans = false
           }
+        }
+        storage = {
+          remote_write = [for url in [var.tempo.metricsGenerator.remoteWriteUrl] : { url = url } if url != ""]
         }
       }
     }

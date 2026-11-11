@@ -45,4 +45,5 @@ module "loki" {
     for bucket in var.buckets :
     "${local.bucket_prefix}${bucket}" => module.loki_gcs.names["${local.bucket_prefix}${bucket}"]
   }
+  loki_extra = var.loki_extra
 }

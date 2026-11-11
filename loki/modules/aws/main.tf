@@ -117,4 +117,5 @@ module "loki" {
     for bucket in var.buckets :
     "${local.bucket_prefix}${bucket}" => "${local.bucket_prefix}${bucket}"
   }
+  loki_extra = var.loki_extra
 }

@@ -193,6 +193,12 @@ variable "loki" {
   default     = {}
 }
 
+variable "loki_extra" {
+  type        = any
+  description = "Additional Helm values for loki chart, merged after the generated config"
+  default     = {}
+}
+
 variable "use_pod_identity" {
   type        = bool
   description = "Use EKS Pod Identity instead of IRSA for S3 access"

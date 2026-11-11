@@ -220,3 +220,9 @@ variable "loki" {
   default     = {}
 }
 
+variable "loki_extra" {
+  type        = any
+  description = "Additional Helm values for loki chart, merged after the generated config"
+  default     = {}
+}
+

@@ -5,5 +5,5 @@ resource "helm_release" "loki" {
   version    = var.loki_helm_version
   namespace  = var.namespace
 
-  values = [yamlencode(local.loki_config)]
+  values = [yamlencode(local.loki_config), yamlencode(var.loki_extra)]
 }
